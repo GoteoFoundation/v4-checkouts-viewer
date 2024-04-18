@@ -1,13 +1,7 @@
 <script lang="ts">
-    import '../app.pcss';
+    import "../app.pcss";
 </script>
 
-<main>
+<main class="md:m-10">
     <slot />
 </main>
-
-<style>
-    main {
-        padding: 1em;
-    }
-</style>

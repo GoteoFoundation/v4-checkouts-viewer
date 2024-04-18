@@ -5,6 +5,7 @@
     interface Item {
         id: string;
         title: string;
+        props: any
     }
 
     export let items: Item[];
@@ -42,23 +43,23 @@
     }
 </script>
 
-{#each selected as selected (selected.id)}
+{#each selected as item, i (item.id)}
     <MultiSelectOption
-        id={selected.id}
-        title={selected.title}
-        subtitle={selected.id}
+        id={item.id}
         checked={true}
         on:checked={addSelection}
         on:unchecked={removeSelection}
-    />
+    >
+        <slot {item} index={i} />
+    </MultiSelectOption>
 {/each}
-{#each selectableItems as selectable (selectable.id)}
+{#each selectableItems as item, i (item.id)}
     <MultiSelectOption
-        id={selectable.id}
-        title={selectable.title}
-        subtitle={selectable.id}
+        id={item.id}
         checked={false}
         on:checked={addSelection}
         on:unchecked={removeSelection}
-    />
+    >
+        <slot {item} index={i} />
+    </MultiSelectOption>
 {/each}

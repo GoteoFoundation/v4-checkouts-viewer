@@ -4,7 +4,6 @@
 
     interface Item {
         id: string;
-        title: string;
         props: any
     }
 

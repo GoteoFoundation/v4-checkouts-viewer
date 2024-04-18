@@ -4,15 +4,15 @@
 
     interface Item {
         id: string;
-        props: any
+        props: any;
     }
 
     export let items: Item[];
 
     export let selected: Item[] = [];
-    let selectableItems: Item[] = items.filter(
-        (p: Item) => !selected.map((s: Item) => s.id).includes(p.id),
-    );
+    let selectableItems: Item[] = items
+        .filter((p: Item) => !selected.map((s: Item) => s.id).includes(p.id))
+        .sort();
 
     const dispatch = createEventDispatcher();
 
@@ -33,8 +33,17 @@
 
         if (typeof item !== "undefined") {
             selectableItems = [...selectableItems, item].sort(
-                (a: Item, b: Item) =>
-                    new Number(b.id).valueOf() - new Number(a.id).valueOf(),
+                (a: Item, b: Item) => {
+                    if (a.id < b.id) {
+                        return 1;
+                    }
+
+                    if (a.id > b.id) {
+                        return -1;
+                    }
+
+                    return 0;
+                },
             );
         }
 

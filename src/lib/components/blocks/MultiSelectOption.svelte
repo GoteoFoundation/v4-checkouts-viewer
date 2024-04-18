@@ -18,7 +18,7 @@
 </script>
 
 <Label for={id}>
-    <div class="items-top flex space-x-2 mt-5">
+    <div class="items-top flex space-x-2 mt-5 hover:cursor-pointer">
         <Checkbox {id} bind:checked />
         <div class="grid gap-1.5 leading-none">
             {title}

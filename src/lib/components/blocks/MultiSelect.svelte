@@ -7,64 +7,48 @@
         props: any;
     }
 
-    export let items: Item[];
+    export let options: Item[] = [];
+
+    let optionsIds: string[];
+    $: optionsIds = options.map((option: Item) => option.id);
 
     export let selected: Item[] = [];
-    let selectableItems: Item[] = items
-        .filter((p: Item) => !selected.map((s: Item) => s.id).includes(p.id))
-        .sort();
+
+    let selectedIds: string[];
+    $: selectedIds = selected.map((selection: Item) => selection.id);
+
+    let mixedOptions: Item[] = [...selected, ...options];
+    let allOptions: Item[] = [
+        ...new Set(mixedOptions.map((o: Item) => o.id)),
+    ].map((id: string) => mixedOptions.filter((o: Item) => o.id === id)[0]);
+
+    function isSelected(id: string) {
+        return selectedIds.includes(id);
+    }
 
     const dispatch = createEventDispatcher();
 
     function addSelection(e: CustomEvent) {
         const id = e.detail.id;
 
-        selected = [...selected, items.filter((p: Item) => p.id === id)[0]];
-        selectableItems = selectableItems.filter((p: Item) => p.id !== id);
+        selected = [...selected, options.filter((o: Item) => o.id === id)[0]];
 
         dispatch("change", { value: selected });
     }
 
     function removeSelection(e: CustomEvent) {
         const id = e.detail.id;
-        const item = items.filter((p: Item) => p.id === id)?.[0];
 
-        selected = selected.filter((p: Item) => p.id !== id);
-
-        if (typeof item !== "undefined") {
-            selectableItems = [...selectableItems, item].sort(
-                (a: Item, b: Item) => {
-                    if (a.id < b.id) {
-                        return 1;
-                    }
-
-                    if (a.id > b.id) {
-                        return -1;
-                    }
-
-                    return 0;
-                },
-            );
-        }
+        selected = selected.filter((o: Item) => o.id !== id);
 
         dispatch("change", { value: selected });
     }
 </script>
 
-{#each selected as item, i (item.id)}
+{#each allOptions as item, i (item.id)}
     <MultiSelectOption
         id={item.id}
-        checked={true}
-        on:checked={addSelection}
-        on:unchecked={removeSelection}
-    >
-        <slot {item} index={i} />
-    </MultiSelectOption>
-{/each}
-{#each selectableItems as item, i (item.id)}
-    <MultiSelectOption
-        id={item.id}
-        checked={false}
+        checked={isSelected(item.id)}
         on:checked={addSelection}
         on:unchecked={removeSelection}
     >

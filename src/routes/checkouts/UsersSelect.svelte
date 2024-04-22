@@ -89,7 +89,7 @@
     </Card.Header>
     <Card.Content class="pt-1 h-80 overflow-y-auto">
         <Search
-            placeholder="Buscar usuarios por nombre, correo o nombre de usuario"
+            placeholder="Buscar usuarios"
             bind:value={searchValue}
             on:input={searchUsers}
         />

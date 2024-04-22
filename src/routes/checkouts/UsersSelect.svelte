@@ -87,13 +87,13 @@
             {selectedValues.length} usuarios seleccionados
         </Card.Description>
     </Card.Header>
-    <Card.Content>
+    <Card.Content class="pt-1 h-80 overflow-y-auto">
         <Search
             placeholder="Buscar usuarios por nombre, correo o nombre de usuario"
             bind:value={searchValue}
             on:input={searchUsers}
         />
-        <div class="mt-5 md:h-[300px] overflow-auto">
+        <div class="mt-5">
             {#await searchResults}
                 <div class="flex items-center space-x-4">
                     <Skeleton class="h-12 w-12 rounded-full" />

@@ -3,23 +3,17 @@
     import ProjectGlimpse from "$lib/components/content/ProjectGlimpse.svelte";
     import TipjarGlimpse from "$lib/components/content/TipjarGlimpse.svelte";
 
-    export let charges: string[];
+    export let charges: any[];
 
     let data = Promise.all(
         charges.map(async (charge) => {
-            const data = await fetch("http://localhost:8090" + charge).then(
-                (res) => res.json(),
-            );
-
-            const target = await fetch(
-                "http://localhost:8090" + data.target,
-            ).then((res) => res.json());
+            const target = charge.target;
 
             const resource = await fetch(
                 "http://localhost:8090" + target[target.ownerResource],
             ).then((res) => res.json());
 
-            return { ...data, target: { ...target, resource } };
+            return { ...charge, target: { ...target, resource } };
         }),
     );
 </script>

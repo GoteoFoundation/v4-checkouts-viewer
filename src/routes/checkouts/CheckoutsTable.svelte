@@ -9,6 +9,7 @@
     import * as Table from "$lib/components/ui/table";
     import CheckoutsTableOrigin from "./CheckoutsTableOrigin.svelte";
     import CheckoutsTableStatus from "./CheckoutsTableStatus.svelte";
+    import CheckoutsTableCharges from "./CheckoutsTableCharges.svelte";
 
     type Checkout = {
         id: string;
@@ -44,8 +45,10 @@
             header: "Gateway",
         }),
         table.column({
-            accessor: ({ charges }) => charges.length,
+            accessor: "charges",
             header: "Cobros",
+            cell: ({ value }) =>
+                createRender(CheckoutsTableCharges, { charges: value }),
         }),
     ]);
 

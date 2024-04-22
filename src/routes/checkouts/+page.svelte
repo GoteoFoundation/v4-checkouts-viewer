@@ -1,7 +1,7 @@
 <script lang="ts">
     import CheckoutsTable from "./CheckoutsTable.svelte";
-    import ProjectsSelect from "./ProjectsSelect.svelte";
     import UsersSelect from "./UsersSelect.svelte";
+    import TargetSelect from "./TargetSelect.svelte";
 
     let checkouts: Promise<any[]>;
 
@@ -29,13 +29,13 @@
 <div class="space-y-10">
     <div class="grid grid-cols-6 gap-10">
         <div class="col-span-2">
-            <ProjectsSelect
-                on:change={(e) => searchCheckoutsByProject(e.detail.value)}
+            <UsersSelect
+                on:change={(e) => searchCheckoutsByUsers(e.detail.value)}
             />
         </div>
         <div class="col-span-2">
-            <UsersSelect
-                on:change={(e) => searchCheckoutsByUsers(e.detail.value)}
+            <TargetSelect
+                on:change={(e) => searchCheckoutsByProject(e.detail.value)}
             />
         </div>
     </div>

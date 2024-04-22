@@ -3,6 +3,7 @@
     import Search from "$lib/components/blocks/Search.svelte";
     import ProjectGlimpse from "$lib/components/content/ProjectGlimpse.svelte";
     import * as Card from "$lib/components/ui/card";
+    import * as Tabs from "$lib/components/ui/tabs";
     import { createEventDispatcher } from "svelte";
 
     const dispatch = createEventDispatcher();
@@ -34,18 +35,18 @@
 
 <Card.Root>
     <Card.Header>
-        <Card.Title>Proyectos</Card.Title>
+        <Card.Title>Destinos</Card.Title>
         <Card.Description>
-            {selectedValues.length} proyectos seleccionados
+            {selectedValues.length} destinos seleccionados
         </Card.Description>
     </Card.Header>
-    <Card.Content>
+    <Card.Content class="pt-1 h-80 overflow-y-auto">
         <Search
             placeholder="Buscar proyectos por título"
             bind:value={searchValue}
             on:input={searchProjects}
         />
-        <div class="mt-5 md:h-[300px] overflow-auto">
+        <div class="mt-5">
             {#await searchResults then projects}
                 <MultiSelect
                     bind:selected={selectedValues}

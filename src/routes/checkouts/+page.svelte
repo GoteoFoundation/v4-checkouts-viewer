@@ -27,13 +27,13 @@
 </script>
 
 <div class="space-y-10">
-    <div class="grid grid-cols-6 gap-10">
-        <div class="col-span-2">
+    <div class="grid grid-cols-12 gap-10">
+        <div class="col-span-3">
             <UsersSelect
                 on:change={(e) => searchCheckoutsByUsers(e.detail.value)}
             />
         </div>
-        <div class="col-span-2">
+        <div class="col-span-3">
             <TargetSelect
                 on:change={(e) => searchCheckoutsByProject(e.detail.value)}
             />

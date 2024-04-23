@@ -5,10 +5,14 @@
 
     const dispatch = createEventDispatcher();
 
-    let filters: any[][] = [];
+    let filters: string[][] = [];
 
     function handleStatus(e: any) {
         filters = [...filters, ["status", e.value]];
+
+        if (e.value === "all") {
+            filters = filters.filter((f) => f[0] !== "status");
+        }
 
         dispatch("change", { value: filters });
     }
@@ -27,6 +31,7 @@
                 <Select.Value placeholder="Estado" />
             </Select.Trigger>
             <Select.Content>
+                <Select.Item value="all">Todos</Select.Item>
                 <Select.Item value="charged">Cobrados</Select.Item>
                 <Select.Item value="pending">Pendientes de cobro</Select.Item>
             </Select.Content>

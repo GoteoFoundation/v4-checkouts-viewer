@@ -17,6 +17,7 @@
         status: "pending" | "charged";
         gateway: string;
         charges: any[];
+        createdAt: string;
     };
 
     export let checkouts: Checkout[];
@@ -33,6 +34,10 @@
             accessor: "origin",
             cell: ({ value }) =>
                 createRender(CheckoutsTableOrigin, { origin: value }),
+        }),
+        table.column({
+            header: "Created",
+            accessor: ({ createdAt }) => (new Date(createdAt)).toLocaleDateString()
         }),
         table.column({
             accessor: "status",

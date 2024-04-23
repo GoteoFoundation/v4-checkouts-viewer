@@ -1,28 +1,34 @@
 <script lang="ts">
     import MultiSelect from "$lib/components/blocks/MultiSelect.svelte";
-    import Search from "$lib/components/blocks/Search.svelte";
     import ProjectGlimpse from "$lib/components/content/ProjectGlimpse.svelte";
+    import ProjectsSearch from "$lib/components/content/ProjectsSearch.svelte";
+    import TipjarGlimpse from "$lib/components/content/TipjarGlimpse.svelte";
+    import TipjarsSearch from "$lib/components/content/TipjarsSearch.svelte";
     import * as Card from "$lib/components/ui/card";
-    import * as Tabs from "$lib/components/ui/tabs";
+    import * as Select from "$lib/components/ui/select";
     import { createEventDispatcher } from "svelte";
 
     const dispatch = createEventDispatcher();
 
-    let searchValue: string = "";
-    let searchResults: Promise<any[]> = new Promise((res) => res([]));
+    interface Target {
+        label: string;
+        value: "projects" | "tipjars";
+    }
+
+    let targets: Target[] = [
+        {
+            label: "Proyectos",
+            value: "projects",
+        },
+        {
+            label: "Botes de propina",
+            value: "tipjars",
+        },
+    ];
+
+    let selectedTarget: Target = targets[0];
 
     export let selectedValues: any[] = [];
-
-    function searchProjects() {
-        if (searchValue === "") {
-            return;
-        }
-
-        searchResults = fetch(
-            "http://localhost:8090/v4/projects?" +
-                new URLSearchParams([["title", searchValue]]),
-        ).then((res) => res.json());
-    }
 
     function handleChange(e: CustomEvent) {
         selectedValues = e.detail.value;
@@ -41,13 +47,20 @@
         </Card.Description>
     </Card.Header>
     <Card.Content class="pt-1 h-80 overflow-y-auto">
-        <Search
-            placeholder="Buscar proyectos por título"
-            bind:value={searchValue}
-            on:input={searchProjects}
-        />
-        <div class="mt-5">
-            {#await searchResults then projects}
+        <Select.Root bind:selected={selectedTarget} onSelectedChange={() => selectedValues = []} >
+            <Select.Trigger class="mb-5">
+                <Select.Value placeholder="Destinos" />
+            </Select.Trigger>
+            <Select.Content>
+                {#each targets as target}
+                    <Select.Item value={target.value}>
+                        {target.label}
+                    </Select.Item>
+                {/each}
+            </Select.Content>
+        </Select.Root>
+        {#if selectedTarget.value === "projects"}
+            <ProjectsSearch let:projects>
                 <MultiSelect
                     bind:selected={selectedValues}
                     on:change={handleChange}
@@ -61,7 +74,21 @@
                 >
                     <ProjectGlimpse project={item.props} />
                 </MultiSelect>
-            {/await}
-        </div>
+            </ProjectsSearch>
+        {/if}
+        {#if selectedTarget.value === "tipjars"}
+            <TipjarsSearch let:tipjars>
+                <MultiSelect
+                    bind:selected={selectedValues}
+                    on:change={handleChange}
+                    options={tipjars.map((tipjar) => {
+                        return { id: tipjar.id.toString(), props: tipjar };
+                    })}
+                    let:item
+                >
+                    <TipjarGlimpse tipjar={item.props} />
+                </MultiSelect>
+            </TipjarsSearch>
+        {/if}
     </Card.Content>
 </Card.Root>

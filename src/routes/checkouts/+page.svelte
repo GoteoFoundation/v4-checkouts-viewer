@@ -2,15 +2,21 @@
     import CheckoutsTable from "./CheckoutsTable.svelte";
     import UsersSelect from "./UsersSelect.svelte";
     import TargetSelect from "./TargetSelect.svelte";
+    import Filters from "./Filters.svelte";
 
     let checkouts: Promise<any[]>;
 
     let usersParam: any[][] = [];
     let projectsParam: any[][] = [];
+    let filtersParams: any[][] = [];
 
     $: checkouts = fetch(
         "http://localhost:8090/v4/gateway_checkouts?" +
-            new URLSearchParams([...projectsParam, ...usersParam]),
+            new URLSearchParams([
+                ...projectsParam,
+                ...usersParam,
+                ...filtersParams,
+            ]),
     ).then((res) => res.json());
 
     function searchCheckoutsByProject(projects: any[]) {
@@ -23,6 +29,10 @@
         usersParam = users.map((user) => {
             return ["origin[]", user.accounting];
         });
+    }
+
+    function addFiltersParams(filters: any[][]) {
+        filtersParams = filters;
     }
 </script>
 
@@ -37,6 +47,9 @@
             <TargetSelect
                 on:change={(e) => searchCheckoutsByProject(e.detail.value)}
             />
+        </div>
+        <div class="col-span-6">
+            <Filters on:change={(e) => addFiltersParams(e.detail.value)} />
         </div>
     </div>
     {#await checkouts}

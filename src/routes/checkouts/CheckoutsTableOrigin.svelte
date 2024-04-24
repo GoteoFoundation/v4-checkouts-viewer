@@ -17,6 +17,8 @@
     }
 </script>
 
-{#await accountingOwner then accountingOwner}
+{#await accountingOwner}
+    <p>Cargando datos...</p>
+{:then accountingOwner}
     <UserGlimpse user={accountingOwner} />
 {/await}

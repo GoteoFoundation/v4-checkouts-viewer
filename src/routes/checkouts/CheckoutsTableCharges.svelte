@@ -18,7 +18,9 @@
     );
 </script>
 
-{#await data then data}
+{#await data}
+    <p>Cargando datos...</p>
+{:then data} 
     {#each data as charge}
         <Money amount={charge.money.amount} currency={charge.money.currency} />
         &rarr;

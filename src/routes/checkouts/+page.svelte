@@ -3,6 +3,7 @@
     import UsersSelect from "./UsersSelect.svelte";
     import TargetSelect from "./TargetSelect.svelte";
     import Filters from "./Filters.svelte";
+    import Downloadable from "$lib/components/blocks/Downloadable.svelte";
 
     let checkouts: Promise<any[]>;
 
@@ -10,14 +11,15 @@
     let projectsParam: any[][] = [];
     let filtersParams: any[][] = [];
 
-    $: checkouts = fetch(
+    $: url =
         "http://localhost:8090/v4/gateway_checkouts?" +
-            new URLSearchParams([
-                ...projectsParam,
-                ...usersParam,
-                ...filtersParams,
-            ]),
-    ).then((res) => res.json());
+        new URLSearchParams([
+            ...projectsParam,
+            ...usersParam,
+            ...filtersParams,
+        ]);
+
+    $: checkouts = fetch(url).then((res) => res.json());
 
     function searchCheckoutsByProject(projects: any[]) {
         projectsParam = projects.map((project) => {
@@ -56,5 +58,8 @@
         <h1>Cargando resultados...</h1>
     {:then checkouts}
         <CheckoutsTable {checkouts} />
+        <Downloadable {url} options={{ headers: { Accept: "text/csv" } }}>
+            Exportar a CSV
+        </Downloadable>
     {/await}
 </div>

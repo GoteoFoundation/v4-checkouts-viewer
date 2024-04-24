@@ -8,11 +8,19 @@
     let filters: string[][] = [];
 
     function handleStatus(e: any) {
-        filters = [...filters, ["status", e.value]];
+        filters = [
+            ...filters.filter((f: string[]) => f[0] !== "status[]"),
+            ...e.map((f: any) => ["status[]", f.value]),
+        ];
 
-        if (e.value === "all") {
-            filters = filters.filter((f) => f[0] !== "status");
-        }
+        dispatch("change", { value: filters });
+    }
+
+    function handleGateway(e: any) {
+        filters = [
+            ...filters.filter((f: string[]) => f[0] !== "gateway[]"),
+            ...e.map((f: any) => ["gateway[]", f.value]),
+        ];
 
         dispatch("change", { value: filters });
     }
@@ -26,14 +34,25 @@
         </Card.Description>
     </Card.Header>
     <Card.Content class="pt-1 h-80 overflow-y-auto">
-        <Select.Root onSelectedChange={handleStatus}>
+        <Select.Root multiple onSelectedChange={handleStatus}>
             <Select.Trigger class="mb-5">
                 <Select.Value placeholder="Estado" />
             </Select.Trigger>
             <Select.Content>
-                <Select.Item value="all">Todos</Select.Item>
                 <Select.Item value="charged">Cobrados</Select.Item>
                 <Select.Item value="pending">Pendientes de cobro</Select.Item>
+            </Select.Content>
+        </Select.Root>
+        <Select.Root multiple onSelectedChange={handleGateway}>
+            <Select.Trigger class="mb-5">
+                <Select.Value placeholder="Pasarela de pago" />
+            </Select.Trigger>
+            <Select.Content>
+                <Select.Item value="cash">Pago en efectivo</Select.Item>
+                <Select.Item value="paypal">Paypal</Select.Item>
+                <Select.Item value="wallet">Monedero virtual</Select.Item>
+                <Select.Item value="stripe">Stripe</Select.Item>
+                <Select.Item value="tpv">TPV</Select.Item>
             </Select.Content>
         </Select.Root>
     </Card.Content>

@@ -38,7 +38,7 @@
     }
 </script>
 
-<div class="space-y-10">
+<div class="lg:max-w-[1400px] m-auto space-y-10">
     <div class="grid grid-cols-12 gap-10">
         <div class="col-span-3">
             <UsersSelect

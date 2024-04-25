@@ -51,7 +51,7 @@
         }),
         table.column({
             accessor: "charges",
-            header: "Cobros",
+            header: "Charges",
             cell: ({ value }) =>
                 createRender(CheckoutsTableCharges, { charges: value }),
         }),
